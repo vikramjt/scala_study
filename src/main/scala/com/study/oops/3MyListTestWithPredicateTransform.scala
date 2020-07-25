@@ -33,7 +33,7 @@ abstract class MyListPreTran[+A] {
   def flatMap[B](myTransformer: MyTransformer[A, MyListPreTran[B]]): MyListPreTran[B]
 }
 
-case object EmptyPreTran extends MyListPreTran[Nothing] {
+object EmptyPreTran extends MyListPreTran[Nothing] {
   def head: Nothing = throw new NoSuchElementException
   def tail: MyListPreTran[Nothing] = throw new NoSuchElementException
   def isEmpty: Boolean = true
@@ -47,7 +47,7 @@ case object EmptyPreTran extends MyListPreTran[Nothing] {
   override def flatMap[B](myTransformer: MyTransformer[Nothing, MyListPreTran[B]]): MyListPreTran[B] = EmptyPreTran
 }
 
-case class ConsPreTran[+A](h: A, t: MyListPreTran[A]) extends MyListPreTran[A] { //As the MyList is covariant [+A] then the child should be covariant
+class ConsPreTran[+A](h: A, t: MyListPreTran[A]) extends MyListPreTran[A] { //As the MyList is covariant [+A] then the child should be covariant
   def head: A = h
   def tail: MyListPreTran[A] = t
   def isEmpty: Boolean = false
@@ -69,7 +69,7 @@ case class ConsPreTran[+A](h: A, t: MyListPreTran[A]) extends MyListPreTran[A] {
       myTransformer.transform(h) ++ t.flatMap(myTransformer)
 }
 
-object ListTestPreTran extends App {
+object MyListTestWithPredicateTransform extends App {
   val listOfIntegers: MyListPreTran[Int] = new ConsPreTran(1, new ConsPreTran(2, new ConsPreTran(3, new ConsPreTran(4, EmptyPreTran))))
   val anotherListOfIntegers: MyListPreTran[Int] = new ConsPreTran(5, new ConsPreTran(6, EmptyPreTran))
   println(listOfIntegers.toString)

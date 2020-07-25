@@ -8,7 +8,6 @@ abstract class MyList {
        add(int) => new list with this element added
        toString => a string representation of the list
      */
-
   def head: Int
   def tail: MyList
   def isEmpty: Boolean
@@ -18,7 +17,7 @@ abstract class MyList {
   override def toString: String = "[" + printElements + "]"
 }
 
-case object Empty extends MyList {
+object Empty extends MyList {
     def head: Int = throw new NoSuchElementException
     def tail: MyList = throw new NoSuchElementException
     def isEmpty: Boolean = true
@@ -26,7 +25,7 @@ case object Empty extends MyList {
     def printElements: String = ""
 }
 
-case class Cons(h: Int, t: MyList) extends MyList {
+class Cons(h: Int, t: MyList) extends MyList {
     def head: Int = h
     def tail: MyList = t
     def isEmpty: Boolean = false
@@ -36,7 +35,7 @@ case class Cons(h: Int, t: MyList) extends MyList {
       else h + " " + t.printElements
 }
 
-object ListTest extends App {
+object MyListTest extends App {
     val listOfIntegers: MyList = new Cons(1, new Cons(2, new Cons(3, Empty)))
     println(listOfIntegers.toString)
     println("Test")

@@ -18,7 +18,7 @@ abstract class MyListGeneric[+A] {
   override def toString: String = "[" + printElements + "]"
 }
 
-case object EmptyGeneric extends MyListGeneric[Nothing] {
+object EmptyGeneric extends MyListGeneric[Nothing] {
   def head: Nothing = throw new NoSuchElementException
   def tail: MyListGeneric[Nothing] = throw new NoSuchElementException
   def isEmpty: Boolean = true
@@ -26,7 +26,7 @@ case object EmptyGeneric extends MyListGeneric[Nothing] {
   def printElements: String = ""
 }
 
-case class ConsGeneric[+A](h: A, t: MyListGeneric[A]) extends MyListGeneric[A] { //As the MyList is covariant [+A] then the child should be covariant
+class ConsGeneric[+A](h: A, t: MyListGeneric[A]) extends MyListGeneric[A] { //As the MyList is covariant [+A] then the child should be covariant
   def head: A = h
   def tail: MyListGeneric[A] = t
   def isEmpty: Boolean = false
@@ -36,7 +36,7 @@ case class ConsGeneric[+A](h: A, t: MyListGeneric[A]) extends MyListGeneric[A] {
     else h + " " + t.printElements
 }
 
-object ListTestGeneric extends App {
+object MyListTestWithGeneric extends App {
   val listOfIntegers: MyListGeneric[Int] = new ConsGeneric(1, new ConsGeneric(2, new ConsGeneric(3, EmptyGeneric)))
   println(listOfIntegers.toString)
   val listOfStrings: MyListGeneric[String] = new ConsGeneric("One", new ConsGeneric("Two", EmptyGeneric))
