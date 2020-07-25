@@ -33,7 +33,7 @@ abstract class MyListPreTran[+A] {
   def flatMap[B](myTransformer: MyTransformer[A, MyListPreTran[B]]): MyListPreTran[B]
 }
 
-object EmptyPreTran extends MyListPreTran[Nothing] {
+case object EmptyPreTran extends MyListPreTran[Nothing] {
   def head: Nothing = throw new NoSuchElementException
   def tail: MyListPreTran[Nothing] = throw new NoSuchElementException
   def isEmpty: Boolean = true
@@ -47,7 +47,7 @@ object EmptyPreTran extends MyListPreTran[Nothing] {
   override def flatMap[B](myTransformer: MyTransformer[Nothing, MyListPreTran[B]]): MyListPreTran[B] = EmptyPreTran
 }
 
-class ConsPreTran[+A](h: A, t: MyListPreTran[A]) extends MyListPreTran[A] { //As the MyList is covariant [+A] then the child should be covariant
+case class ConsPreTran[+A](h: A, t: MyListPreTran[A]) extends MyListPreTran[A] { //As the MyList is covariant [+A] then the child should be covariant
   def head: A = h
   def tail: MyListPreTran[A] = t
   def isEmpty: Boolean = false
@@ -94,4 +94,8 @@ object MyListTestWithPredicateTransform extends App {
     override def transform(elem: Int): MyListPreTran[Int] = new ConsPreTran(elem, new ConsPreTran(elem+1, EmptyPreTran))
   }))
 
+  //By adding the case keyword to the Empty object and MyList class the equal and hashcode method
+  // are by default added to the classes and object.
+  val cloneListOfIntegers: MyListPreTran[Int] = new ConsPreTran(1, new ConsPreTran(2, new ConsPreTran(3, new ConsPreTran(4, EmptyPreTran))))
+  println(listOfIntegers == cloneListOfIntegers)
 }
